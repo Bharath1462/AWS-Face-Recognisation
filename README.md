@@ -20,3 +20,23 @@ User uploads image to S3 Bucket
 
 --> Recognition Response is Logged
     The Lambda writes the detected face details to CloudWatch Logs.  
+
+--->Post-Terraform Manual Steps
+🔹 Upload image to S3 (manually or with AWS CLI):
+aws s3 cp myface.jpg s3://recognition-image-bucket-12345/
+🔹 Index face via AWS CLI:
+aws recognition index-faces \
+  --collection-id face-collection-demo \
+  --image "S3Object={Bucket=rekognition-image-bucket-12345,Name=myface.jpg}" \
+  --external-image-id "person1" \
+  --region us-east-1
+🔹 Search for face match:
+aws recognition search-faces-by-image \
+  --collection-id face-collection-demo \
+  --image "S3Object={Bucket=recognition-image-bucket-12345,Name=myface.jpg}" \
+  --region us-east-1
+
+✅ Requirements
+AWS CLI configured (aws configure)
+Terraform v1.x+
+Valid AWS IAM credentials with rights to Rekognition, IAM, and S3
